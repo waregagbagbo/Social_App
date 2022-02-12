@@ -97,4 +97,4 @@ def backPage(request):
 #logout view
 def logoutPage(request):
     redirect(request)
-    return HttpResponseRedirect(reverse('sign_out'))
+    return HttpResponseRedirect(reverse('/'))

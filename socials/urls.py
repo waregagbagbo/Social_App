@@ -7,12 +7,12 @@ app_name ='socials'
 urlpatterns = [  
     path('register',views.registerPage,name='sign_up'),
     path('login', views.loginPage, name='login'),
-    path('logout/', views.logoutPage, name='logout'),
+    path('logout', views.logoutPage, name='logout'),
 
     path("",views.dashboard,name='dashboard'),
     path('profile_list/', views.profile_list, name='profile_list'),
     path("profile/<int:pk>/", views.profile, name="profile"), 
-    path('sign_out', views.backPage, name='back'),
+   # path('sign_out', views.backPage, name='back'),
 
     
 path('reset_password/',auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),
