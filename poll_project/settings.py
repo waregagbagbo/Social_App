@@ -134,7 +134,7 @@ STATICFILES_DIR = BASE_DIR/'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGOUT_REDIRECT_URL = 'main'
+LOGOUT_REDIRECT_URL = 'back'
 
 from django.contrib.messages import constants as messages
 

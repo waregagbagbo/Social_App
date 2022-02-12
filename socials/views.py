@@ -90,11 +90,11 @@ def loginPage(request):
     else:
         return render(request,'socials:register')
 
-def mainPage(request):
+def backPage(request):
     return render(request,'social_pages/main.html')
 
 
 #logout view
 def logoutPage(request):
     redirect(request)
-    return HttpResponseRedirect(reverse('main'))
+    return HttpResponseRedirect(reverse('sign_out'))
