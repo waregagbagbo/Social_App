@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load bulma_tags %}
+
+{% block content %}
+<div class="container">
+    <p>Thank you for visting our site.</p>
+</div>
+<div class='field is-grouped'>
+          <div class="control">
+              <p>Having an account?
+                  <a href="{% url 'register' %}">Register</a>                
+              </p>
+          </div>
+</div>
+
+{% endblock %}
