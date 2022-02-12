@@ -1,0 +1,50 @@
+{% extends 'base.html'%}
+{% load bulma_tags %}
+{% load static %}
+
+
+{% block content %}
+
+<style>
+    img{
+        height:430px;
+        width:500px;
+        border-radius:10px;
+      }
+</style>
+
+<div class="container">
+    {% include 'partials/message.html' %}
+    <form method='POST' action='#'>
+        {% csrf_token %}
+        <div class="content">
+            <h1>Login</h1>
+        </div>
+        <div class="field">
+            <div class="control">
+                {{form.username | bulma}}
+            </div>
+        </div>
+        <div class="field">            
+            <div class="control">
+            {{form.password | bulma}}
+            </div>
+        </div>        
+        <button class="button is-primary">Login</button><br>
+        <br>
+        <a href="{% url 'password_reset' %}">Forgot password</a>
+        <div class='field .is-grouped'>
+            <div class="control">
+                <p>Don't have an account?
+                    <a href="{% url 'socials:sign_up' %}">Register</a>
+                </p>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div class="container">
+    <img src="{% static 'images/WES.jpg' alt='WES'%}">
+</div>
+
+{% endblock %}

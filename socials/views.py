@@ -1,27 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect,HttpResponseRedirect
 from .models import Profile,SocialTweet
 from .forms import SocialTweetForm
 from .forms import CustomUserCreationForm
-
+from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 # Create your views here.
 
-'''def dashboard(request):
-    if request.method == 'POST':
-        form  = SocialForm(request.POST)
-        if form.is_valid():
-            socia = form.save(commit= False)
-            socia.user = request.user
-            socia.save()
-            return redirect("social:dashboard")
-    form = SocialForm()
-    context ={
-        'form'
-    }
 
-    return render(request,'social_pages/dashboard.html')'''
-
-
-
+@login_required(login_url='login')
 def dashboard(request):
     form = SocialTweetForm(request.POST or None)
     if request.method == "POST":
@@ -31,18 +18,15 @@ def dashboard(request):
             socials.save()
             return redirect("socials:dashboard")
 
-
     followed_socials = SocialTweet.objects.filter(
-        user__profile__in=request.user.profile.follows.all()
+        user__profile__in = request.user.profile.follows.all()
     ).order_by("-created_at")
     context = {
         'form':form
     }
-    return render(request, "social_pages/dashboard.html",context)
+    return render(request,"social_pages/dashboard.html",context)
 
-
-
-
+@login_required(login_url='login')
 def profile_list(request):
     # fetch all the user profiles except self
     profiles = Profile.objects.exclude(user=request.user)
@@ -51,8 +35,7 @@ def profile_list(request):
     }
     return render(request, 'social_pages/profile_list.html',context)
 
-
-
+@login_required(login_url='login')
 def profile(request, pk):
     profile = Profile.objects.get(pk=pk)
     if request.method == 'POST':
@@ -63,29 +46,55 @@ def profile(request, pk):
             current_user_profile.follows.add(profile)
         elif action == 'unfollow':
             current_user_profile.follows.remove(profile)
-        current_user_profile.save()
-        
+        current_user_profile.save()        
     context ={
         'profile':profile
     }
     return render(request,'social_pages/profile.html',context)
 
 
-def userAccount(request):
-    return render(request,'users/home.html')
+
+def registerPage(request):
+    if request.method == "POST":
+        #then creat an instance object by
+       form = CustomUserCreationForm(request.POST)
+       # theafter check if valid
+       if form.is_valid():
+           form.save()
+           username = form.cleaned_data.get('username')
+           password = form.cleaned_data.get('password1')
+           user = authenticate(request,username=username,password=password)
+           messages.SUCCESS(request,'Succcessful registration')
+           login(request,user)                
+           return redirect('socials:dashboard')
+       else:
+           messages.ERROR(request,'Invalid')
+           messages.ERROR(request,form.erros)
+    else:
+        form = CustomUserCreationForm()
+    context={
+        'form':form
+        }
+    return render(request,'social_pages/register.html',context)
 
 
+# login page
+def loginPage(request):
+    username = request.POST['username']
+    password = request.POST['password1']
+    user = authenticate(request,username=username, password=password1)
+    if profile is not None:
+        login(request,user)
+        messages.success(request,"Successful, and enjoy")
+        return redirect('socials:dashboard')
+    else:
+        return render(request,'socials:register')
 
-def register(request):
-    if request.method == "GET":
-        return render(
-            request, "users/register.html",
-            {"form": CustomUserCreationForm}
-        )
-    elif request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.backend = "django.contrib.auth.backends.ModelBackend"
-            login(request, user)
-            return redirect(reverse("dashboard"))
+def home(request):
+    return render(request,'home')
+
+
+#logout view
+def logoutPage(request):
+    redirect(request)
+    return HttpResponseRedirect(reverse('socials:home'))

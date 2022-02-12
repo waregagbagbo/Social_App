@@ -18,20 +18,19 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-#from django.conf.urls import  include,url
+from django.views.generic.base import TemplateView
 
 
-# Adds site header, site title, index title to the admin side.
+# Adds site header, site title, index title to the admin side to customize the admin
 admin.site.site_header = 'Social For Geeks'
 admin.site.site_title = 'SFG'
 admin.site.index_title = 'Welcome Geeks Socials'
 
-
+# path urls
 urlpatterns = [     
     path('admin/', admin.site.urls),
-    path('accounts', include('accounts.urls')),
-    path('', include('socials.urls')),
-    path('polls/', include('polls.urls')),
-    path('socials/',include('django.contrib.auth.urls')),
-    path('oauth/', include('social_django.urls'))
+    path("",include('socials.urls')),
+    path('polls/',include('polls.urls')),
+    path('accounts/',include('django.contrib.auth.urls')),
+    #path('oauth/', include('social:social_django.urls'))
 ]+ static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

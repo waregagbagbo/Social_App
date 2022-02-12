@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'accounts',
     'polls',
     'socials',
-    "social_django",
+    'bulma',
+    #"social_django",
     
 ]
 
@@ -67,9 +68,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                "social_django.context_processors.backends",
-                "social_django.context_processors.login_redirect",
+                
             ],
+            
         },
     },
 ]
@@ -123,6 +124,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'/static/')
+MEDIA_URL =  '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'/media/')
 STATICFILES_DIR = BASE_DIR/'static'
 
 # Default primary key field type
@@ -130,10 +134,15 @@ STATICFILES_DIR = BASE_DIR/'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "dashboard"
+LOGOUT_REDIRECT_URL = 'socials:home'
 
+from django.contrib.messages import constants as messages
 
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-    "social_core.backends.github.GithubOAuth2",
-]
+MESSAGE_TAGS ={
+    messages.DEBUG: 'debug',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'error'
+}
+
